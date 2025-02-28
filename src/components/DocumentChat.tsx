@@ -61,6 +61,10 @@ export function DocumentChat({ documentText }: DocumentChatProps) {
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`API returned error: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.choices && data.choices[0]?.message) {

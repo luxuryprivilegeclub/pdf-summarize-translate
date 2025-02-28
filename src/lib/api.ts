@@ -61,7 +61,7 @@ export const summarizeText = async (text: string): Promise<string> => {
         messages: [
           {
             role: 'system',
-            content: 'You are a professional summarizer. Your task is to extract the key points from the provided text and present them as bullet points in Roman Urdu (Urdu written using Latin script). Focus on capturing the essential information in a concise format. Each bullet point should be on a new line starting with a "•" symbol.'
+            content: 'You are a professional summarizer. Your task is to extract the key points from the provided text and present them as bullet points in Roman Urdu (Urdu written using Latin script). Kindly summarize this document and give me summary in Bullet points and make summary in detail also. Focus on capturing the essential information in a concise format. Each bullet point should be on a new line starting with a "•" symbol.'
           },
           {
             role: 'user',

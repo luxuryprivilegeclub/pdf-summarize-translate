@@ -7,7 +7,7 @@ import { FileUploader } from "@/components/FileUploader";
 import { ProcessingStatus } from "@/components/ProcessingStatus";
 import { ResultDisplay } from "@/components/ResultDisplay";
 import { extractPdfText, summarizeText, translateText } from "@/lib/api";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 

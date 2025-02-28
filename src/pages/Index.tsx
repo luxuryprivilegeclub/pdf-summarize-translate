@@ -10,6 +10,7 @@ import { DocumentChat } from "@/components/DocumentChat";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { extractPdfText, summarizeText, translateText } from "@/lib/api";
 import { toast } from "sonner";
+import { MessageSquare } from "lucide-react";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
@@ -37,7 +38,7 @@ const Index = () => {
     }
   };
 
-  const handleProcess = async (action: "summarize" | "translate") => {
+  const handleProcess = async (action: "summarize" | "translate" | "chat") => {
     if (!file) {
       toast.error("Please upload a PDF file first.");
       return;
@@ -50,24 +51,28 @@ const Index = () => {
       // Step 1: Extract text from PDF
       const text = await extractPdfText(file);
       setExtractedText(text);
-      setProcessingStep(action === "summarize" ? "summarizing" : "translating");
 
       // Step 2: Process the text based on selected action
       if (action === "summarize") {
+        setProcessingStep("summarizing");
         const result = await summarizeText(text);
         setSummary(result);
         setActiveTab("summary");
-      } else {
+      } else if (action === "translate") {
+        setProcessingStep("translating");
         const result = await translateText(text);
         setTranslation(result);
         setActiveTab("translation");
+      } else if (action === "chat") {
+        // For chat, we just need to extract the text and switch to chat tab
+        setActiveTab("chat");
       }
 
       setProcessingStep("completed");
-      toast.success(`${action === "summarize" ? "Summary" : "Translation"} completed successfully!`);
+      toast.success(`${action === "summarize" ? "Summary" : action === "translate" ? "Translation" : "Chat"} ready!`);
     } catch (error) {
       console.error("Error processing document:", error);
-      toast.error(`Failed to ${action} the document. Please try again.`);
+      toast.error(`Failed to process the document. Please try again.`);
       setProcessingStep("error");
     } finally {
       setIsProcessing(false);
@@ -140,6 +145,15 @@ const Index = () => {
                   className="bg-primary hover:bg-primary/80 text-primary-foreground transition-all duration-200"
                 >
                   Translate
+                </Button>
+                <Button 
+                  onClick={() => handleProcess("chat")} 
+                  disabled={!file || isProcessing}
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/10 transition-all duration-200"
+                >
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Chat
                 </Button>
               </div>
             </CardFooter>
